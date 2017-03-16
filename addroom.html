@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="offline.manifest">
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Your Inventory</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/dropbox.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.splitview.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.grids.collapsible.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.swipeButton-1.2.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/photoswipe.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/view.css" />
+
+<script type="text/javascript" src="assets/js/klass.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/jquery.filedrop.js"></script>
+<script type="text/javascript" src="assets/js/dropbox.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.splitview.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.js"></script>
+<script type="text/javascript" src="assets/js/querystring-0.9.0-min.js"></script>
+<script type="text/javascript" src="assets/js/iscroll-wrapper.js"></script>
+<script type="text/javascript" src="assets/js/iscroll.js"></script>
+<script type="text/javascript" src="assets/js/jqm.autoComplete-1.3.js"></script>
+<script type="text/javascript" src="assets/js/jquery.swipeButton.min-1.2.js"></script>
+<script type="text/javascript" src="assets/js/code.photoswipe.jquery-3.0.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/js/cordova-1.7.0.js"></script>
+<script type="text/javascript" src="assets/js/links.js"></script>
+
+ <STYLE type="text/css">
+   input {display:block}
+ </STYLE>
+</head><body>	
+
+<script type="text/javascript">
+	var pid = window.localStorage.getItem("type");
+var id = window.localStorage.getItem("id");
+var hid = window.localStorage.getItem("hid");
+var host = "http://" + window.location.host;
+
+	function plusbut(value) {
+		var newval = parseInt($(value).val()) +1 ;
+		$(value).val(newval);
+	};
+	function minusbut(value) {
+		var newval = parseInt($(value).val()) -1 ;
+		if (newval <=0) { newval =0};
+		$(value).val(newval);
+	};
+	
+		function insertRoom() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+			
+			$(':input').each(function() {
+				var type = this.name;
+				//type = type.substring(3,type.length);
+				var val = this.value;
+				if (val >=1) { 
+					for (var i = 0; i < val; i++) {
+							db.transaction(function (tx) {
+				
+								tx.executeSql("INSERT INTO Rooms (HouseID,RoomType) VALUES (?,?)",[id,type]);
+				
+							});
+					}
+				}
+			})
+			setTimeout(function() {
+			//window.location= host;
+			window.location = "index.html";
+
+			},1250);
+
+			
+			
+		};
+	
+	function goBack() { 
+		//window.location = host;
+		 window.history.back();
+}	
+</script>	
+						
+
+            <div data-role="panel" data-id="main">
+                <!-- Start of second page -->
+                <div data-role="page" id="bar">
+
+				
+                    <div data-role="header"  >
+					<a id="back" href='#'  data-iconpos='notext'  data-icon='back' data-theme='c' id="backbutton" onclick="goBack();" >Back</a>
+                     <h1 id="header">Add Rooms</h1>
+					<a   rel="external"  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='insertRoom()'  class='ui-btn-right' >Save</a>
+                  
+                    
+                    
+                    
+</div><!-- /header -->
+
+             <div data-role="content" id="Main">  
+                   	
+<div class="ui-grid-d">
+				<div class="ui-block-a">
+<div data-role='fieldcontain'><label for='slider'>Other:</label><br />
+<input id='valOther' name='Other' value='0' type='text' style='width:20%'>&nbsp;<a href='#' onclick=minusbut('#valOther'); data-role='button' data-icon='minus' 
+data-iconpos='notext' data-inline='true'>-</a>&nbsp;<a href='#'  
+onclick=plusbut('#valOther'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Airing Cupboard:</label><br />
+<input id='valAiringCupboard' name='Airing Cupboard' value='0' type='text' style='width:20%'>
+&nbsp;<a href='#' onclick=minusbut('#valAiringCupboard'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;<a href='#'  
+onclick=plusbut('#valAiringCupboard'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Basement:</label><br /><input id='valBasement' name='Basement' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valBasement'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valBasement'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Bathroom:</label><br /><input id='valBathroom' name='Bathroom' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valBathroom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valBathroom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br />
+</div><div data-role='fieldcontain'><label for='slider'>Bedroom:</label><br /><input id='valBedroom' name='Bedroom' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valBedroom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valBedroom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'>
+<label for='slider'>Bike Store:</label><br /><input id='valBikeStore' name='Bike Store' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valBikeStore'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valBikeStore'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Bin Store:</label><br /><input id='valBinStore' name='Bin Store' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valBinStore'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valBinStore'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'>
+<label for='slider'>Cellar:</label><br /><input id='valCellar' name='Cellar' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valCellar'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valCellar'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div></div>
+<div class='ui-block-b'><div data-role='fieldcontain'><label for='slider'>Conservatory:</label><br /><input id='valConservatory' name='Conservatory' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valConservatory'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valConservatory'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Dining Room:</label><br /><input id='valDiningRoom' name='Dining Room' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valDiningRoom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valDiningRoom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Dressing Room:</label><br /><input id='valDressingRoom' name='Dressing Room' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valDressingRoom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valDressingRoom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Entrance:</label><br /><input id='valEntrance' name='Entrance' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valEntrance'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valEntrance'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Front of Property:</label><br /><input id='valFrontofProperty' name='Front of Property' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valFrontofProperty'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valFrontofProperty'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Garage:</label><br /><input id='valGarage' name='Garage' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valGarage'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valGarage'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Garden:</label><br /><input id='valGarden' name='Garden' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valGarden'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valGarden'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Greenhouse:</label><br /><input id='valGreenhouse' name='Greenhouse' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valGreenhouse'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valGreenhouse'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div></div>
+<div class='ui-block-c'><div data-role='fieldcontain'><label for='slider'>Hallway:</label><br /><input id='valHallway' name='Hallway' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valHallway'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valHallway'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Key Exchange:</label><br /><input id='valKeyExchange' name='Key Exchange' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valKeyExchange'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valKeyExchange'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'>
+<label for='slider'>Kitchen:</label><br /><input id='valKitchen' name='Kitchen' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valKitchen'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valKitchen'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Loft:</label><br /><input id='valLoft' name='Loft' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valLoft'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valLoft'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Lounge:</label><br /><input id='valLounge' name='Lounge' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valLounge'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valLounge'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Meter Cupboard:</label><br /><input id='valMeterCupboard' name='Meter Cupboard' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valMeterCupboard'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valMeterCupboard'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Mezzanine:</label><br /><input id='valMezzanine' name='Mezzanine' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valMezzanine'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valMezzanine'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Nursery Room:</label><br /><input id='valNurseryRoom' name='Nursery Room' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valNurseryRoom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valNurseryRoom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div></div>
+<div class='ui-block-d'><div data-role='fieldcontain'><label for='slider'>Office:</label><br /><input id='valOffice' name='Office' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valOffice'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valOffice'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+
+<div data-role='fieldcontain'>
+<label for='slider'>Shed:</label><br /><input id='valShed' name='Shed' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valShed'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valShed'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Outhouse:</label><br /><input id='valOuthouse' name='Outhouse' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valOuthouse'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valOuthouse'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Pantry:</label><br /><input id='valPantry' name='Pantry' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valPantry'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valPantry'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Parking:</label><br /><input id='valParking' name='Parking' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valParking'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valParking'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Porch:</label><br /><input id='valPorch' name='Porch' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valPorch'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valPorch'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Rear of Property:</label><br /><input id='valRearofProperty' name='Rear of Property' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valRearofProperty'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valRearofProperty'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'><label for='slider'>Reception:</label>
+<br /><input id='valReception' name='Reception' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valReception'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valReception'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div></div><div class='ui-block-e'>
+<div data-role='fieldcontain'><label for='slider'>Stairs / Landing:</label><br /><input id='valStairsLanding' name='Stairs&#47;Landing' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valStairsLanding'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valStairsLanding'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'>
+<label for='slider'>Store Cupboard:</label><br /><input id='valStoreCupboard' name='Store Cupboard' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valStoreCupboard'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valStoreCupboard'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Study:</label><br /><input id='valStudy' name='Study' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valStudy'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valStudy'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Summer House:</label><br /><input id='valSummerHouse' name='Summer House' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valSummerHouse'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valSummerHouse'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div><div data-role='fieldcontain'>
+<label for='slider'>Swimming Pool:</label><br /><input id='valSwimmingPool' name='Swimming Pool' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valSwimmingPool'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valSwimmingPool'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Toilet:</label><br /><input id='valToilet' name='Toilet' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valToilet'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valToilet'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Utility Room:</label><br /><input id='valUtilityRoom' name='Utility Room' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valUtilityRoom'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valUtilityRoom'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+<div data-role='fieldcontain'><label for='slider'>Vestibule:</label><br /><input id='valVestibule' name='Vestibule' value='0' type='text' style='width:20%'>&nbsp;
+<a href='#' onclick=minusbut('#valVestibule'); data-role='button' data-icon='minus' data-iconpos='notext' data-inline='true'>-</a>&nbsp;
+<a href='#'  onclick=plusbut('#valVestibule'); data-role='button' data-icon='plus' data-iconpos='notext' data-inline='true'>+</a><br /></div>
+</div>
+</div>
+
+					
+					
+					
+                    </div><!-- /content -->
+
+               <div data-role="footer"  data-iconpos="top">
+			   <div data-role="navbar">
+		<ul>
+				<li><a   href="#" onclick="goBack();" data-icon="home">Home</a></li>
+				<li id="more"><a   onclick="window.location='more.html';return false;" data-icon="grid"  data-role='button'>More</a></li>
+			<li><a onclick="window.location='settings.html';return false;"  data-role='button' href="#"  data-icon="gear">Settings</a></li>
+		
+		
+		</ul>
+	</div><!-- /navbar -->
+	
+		
+	</div><!-- /footer -->
+                </div><!-- /page -->
+                <!-- other main panel pages here -->
+            </div>
+
+</body>
+<script type="text/javascript">
+
+
+var id = window.localStorage.getItem("id");
+
+
+		
+					var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+					db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Property WHERE HouseID=" + id;
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+									$ID = results.rows.item(i).HouseID
+									$House_Number = results.rows.item(i).House_Number
+									$Address1 = results.rows.item(i).Address1
+									$County = results.rows.item(i).County
+									$Postcode = results.rows.item(i).Postcode
+									$strAddress = $House_Number + " " + $Address1 + ", " + $County + ", " + $Postcode;
+									$('#header').html($strAddress + " - Add Rooms");
+								
+									
+								}
+								
+							});
+					});
+			
+	
+</script>
+<html>

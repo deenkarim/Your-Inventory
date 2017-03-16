@@ -1,0 +1,778 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="offline.manifest">
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Your Inventory</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/view.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.datebox.min.css" /> 
+<link rel="stylesheet" href="assets/css/jquery.signaturepad.css">
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.datebox.min.js"></script>
+<script type="text/javascript" src="assets/js/links.js"></script>
+ <STYLE type="text/css">
+   input {display:block}
+ </STYLE>
+</head><body>	
+
+<script type="text/javascript">
+
+var pid = window.localStorage.getItem("type");
+var id = window.localStorage.getItem("id");
+var rid = window.localStorage.getItem("rid");
+var room = window.localStorage.getItem("room");
+var hid = window.localStorage.getItem("hid");
+var host = "http://" + window.location.host;
+	
+	
+	
+	
+				function saveTenant() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+				db.transaction(function (tx) {
+					$Tenant_Name = $('#Tenant_Name2').val()
+					$Tenant_Sig = $('#Tenant_Sig').val()
+					
+					tx.executeSql("UPDATE Property SET Tenant_Name='" + $Tenant_Name + "', Tenant_Sig='" + $Tenant_Sig + "' WHERE HouseID='" + id + "'",[],
+					function(tx, results) {
+						$('.ui-dialog').dialog('close');
+							//window.location.reload();
+							
+					});
+
+				});
+			
+				};
+		function saveSafety() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+				db.transaction(function (tx) {
+					$SEC = $('#SEC').val()
+					$SECLOC = $('#SECLOC').val()
+					$StopLoc = $('#StopLoc').val()
+					$SmokeAlarm = $('#SmokeAlarm').val()
+					$Gas = $('#Gas').val()
+					$PAT = $('#PAT').val()
+					$Window = $('#Window').val()
+					$COD = $('#COD').val()
+				
+					
+					tx.executeSql("UPDATE Property SET SEC='" + $SEC + "', SECLOC='" + $SECLOC + "', StopLoc='" + $StopLoc + "', SmokeAlarm='" + $SmokeAlarm + "', GASSafety='" + $Gas + "', PAT='" + $PAT + "', WindowLocks='" + $Window + "', CODetector='" + $COD + "' WHERE HouseID='" + id + "'",[],
+					function(tx, results) {
+							$('.ui-dialog').dialog('close');
+					});
+				});
+			
+				};
+		
+	
+				function SaveMeter() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+				db.transaction(function (tx) {
+					$MID= $('#MeterID').val()
+					$MeterType = $('#MeterType').val()
+					$Location = $('#Location').val()
+					$SNo = $('#SerialNo').val()
+					$Reading = $('#Reading').val() 
+					$Type = $('#Type').val()
+
+				
+					
+					tx.executeSql("INSERT INTO Meter (HouseID,MeterType,Location,SerialNo,Reading,Type) VALUES (?,?,?,?,?,?)",[id,$MeterType,$Location,$SNo,$Reading,$Type],
+					function(tx, results) {
+						//	$('.ui-dialog').dialog('close');
+									//window.location.href = host + "/more.html";
+									window.location.href =  "/more.html";
+									
+
+					});
+
+				});
+			
+				};
+		
+		
+			function goBack() { 
+		//window.location = host;
+		window.location = "index.html";
+	}
+
+
+function showMeterForm() { 
+	$('#addform').toggle();
+	};
+
+	function editMeterForm(id,MeterType)  { 
+				$('#addform').show();
+				//alert($(this).attr(id));
+				alert(MeterType);
+				$('#Location').val($(this).attr(id));
+
+	};
+	 
+		
+		
+		function updateHouse() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+				db.transaction(function (tx) {
+					$ReportType = $('#ReportType').val()
+					$house_number = $('#house_number').val()
+					$address1 = $('#address1').val()
+					$address2 = $('#address2').val()
+					$town = $('#town').val()
+					$county = $('#county').val()
+					$postcode = $('#postcode').val()
+					$propertytype = $('#propertytype').val()
+					$propertytype2 = $('#propertytype2').val()
+					$Tenant_Name = $('#Tenant_Name').val()
+					$AgentID = $('#Agent').val()
+					$appdate = $('#appdate').val()
+					
+					if ($("#Occupied").attr("checked")) { 
+					$occupied = "Occupied";
+					}
+					
+					
+					$furnished = $('#furnished').val()
+					
+			
+					
+					tx.executeSql("UPDATE Property SET ReportType='" + $ReportType + "', House_Number='" + $house_number + "', Address1='" + $address1 + "', Address2='" + $address2 + "', Town='" + $town + "', County='" + $county + "', Postcode='" + $postcode + "', PropertyType='" + $propertytype + "', PropertyType2='" + $propertytype2 + "', Tenant_Name='" + $Tenant_Name + "', Occupied='" + $occupied + "', Furnished='" + $furnished + "', AgentID='" + $AgentID + "', AppDate='" + $appdate + "' WHERE HouseID='" + id + "'",[],
+					function(tx, results) {
+							window.location.reload();
+					});
+				});
+			
+				};
+
+function goBack(val) { 
+	switch(val) { 
+	case 1:
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("id");
+			window.localStorage.removeItem("hid");
+			window.localStorage.removeItem("iid");
+			window.localStorage.removeItem("room");
+			window.localStorage.removeItem("rid");
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+			return;
+	}
+	switch(pid) { 
+		
+		case "items":
+			window.localStorage.setItem("type","modify"); 
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+			break;
+		default:
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("id");
+			window.localStorage.removeItem("hid");
+			window.localStorage.removeItem("iid");
+			window.localStorage.removeItem("room");
+			window.localStorage.removeItem("rid");
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+	}
+
+}
+	
+ 		
+		function sendSig() {
+			var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+					
+						db.transaction(function (tx) {
+							 
+							$SQL = "SELECT Tenant_Sig FROM Property WHERE HouseID='1'";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+								 
+									$Tenant_Sig = results.rows.item(i).Tenant_Sig
+									$send = jQuery.parseJSON($Tenant_Sig);
+											
+									var $ajaxurl = "dash/server/?pid=saveSig";
+								$.post($ajaxurl, $send , function(data) {
+										alert(data);
+											});
+							
+												
+											
+								}
+								
+							});
+					});
+		}
+
+		
+				
+</script>									
+
+            <div data-role="panel" data-id="main">
+                <!-- Start of second page -->
+                <div data-role="page" id="bar">
+
+				
+                    <div data-role="header"  data-position="fixed">
+					<a href='#'  data-iconpos='notext'  data-icon='back' data-theme='c' id="backbutton"  onclick="goBack();" >Back</a>
+                    <h1 id="header">More</h1>
+					
+                  
+                    
+                    
+                    
+</div><!-- /header -->
+
+
+             <div data-role="content" id="Main">  
+                   	
+<div id="p1">
+
+ 
+ 
+ <div data-role="controlgroup">
+<a href="#details" data-role="button" data-rel="dialog" data-transition="pop">Appointment Details</a>
+</div>
+
+ <div data-role="controlgroup">
+<a href="#meter" data-role="button" data-rel="dialog" data-transition="pop">Meter Readings</a>
+<a href="#safety" data-role="button" data-rel="dialog" data-transition="pop">Safety</a>
+</div>
+
+
+ <div data-role="controlgroup" style="display:none" >
+ <a href="#" data-role="button" onclick="sendSig()" >Send Sig</a>
+<a href="#clean" data-role="button" data-rel="dialog" data-transition="pop">State of Cleanliness Readings</a>
+
+<a href="#TenantDetails" data-role="button" data-rel="dialog" data-transition="pop">Tenant Details</a>
+
+</div>
+</div>
+
+
+
+                    </div><!-- /content -->
+
+               <div data-role="footer"  data-iconpos="top" data-position="fixed" >
+			   <div data-role="navbar">
+		<ul>
+			<li><a   href="#" onclick="goBack(1);" data-icon="home">Home</a></li>
+			<li><a onclick="window.location='settings.html';return false;"  data-role='button' href="#"  data-icon="gear">Settings</a></li>
+				
+		</ul>
+	</div><!-- /navbar -->
+	
+		
+	</div><!-- /footer -->
+                </div><!-- /page -->
+                <!-- other main panel pages here -->
+				
+				
+				
+				
+		<!-- Start of third page: #DETAILS -->
+		
+		
+<div data-role="page" id="details">
+
+	<div data-role="header" data-theme="e">
+	
+	
+		<h1>Appointment Details</h1>
+		<a  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='updateHouse();'  class='ui-btn-right' >Save</a>      
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">
+	<fieldset data-role="controlgroup" data-type="horizontal">
+<label for="appdate">Appointment Date:</label>
+<input name="appdate" id="appdate" type="date" data-role="datebox"
+   data-options='{"mode": "calbox", "calStartDay": 1,"calTodayButton": true,"dateFormat": "dd/mm/YYYY","focusMode": true}' />
+   </fieldset>
+ <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<label>Agent</label>
+ <select name="Agent" id="Agent"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="" selected="selected">Unassigned</option>
+ </select></fieldset>	
+ 
+ 
+ 
+ <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<label>Report Type</label>
+ <select name="ReportType" id="ReportType"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="Inventory and Check-In" selected="selected">Inventory and Check-In</option>
+ <option value="Periodic Property Inspection" >Periodic Property Inspection</option>
+ <option value="Check-out" >Check-out</option>
+  <option value="Vacant Property Inspection" >Vacant Property Inspection</option>
+ </select></fieldset>
+
+					
+<label for="house_number">House No.</label>
+<input id="house_number" type="text" name="house_number" value=""  class="ccm-input-text" />
+<label for="address1">Address 1</label>
+<input id="address1" type="text" name="address1" value=""  class="ccm-input-text" />
+<label for="address2">Address 2</label><input id="address2" type="text" name="address2" value=""  class="ccm-input-text" />
+<label for="town">Town</label><input id="town" type="text" name="town" value=""  class="ccm-input-text" /><label for="county">County</label>
+<input id="county" type="text" name="county" value=""  class="ccm-input-text" /><label for="postcode">Post Code</label>
+<input id="postcode" type="text" name="postcode" value=""  class="ccm-input-text" /> <fieldset data-role="controlgroup" data-type="horizontal">
+<legend>Property Type:</legend>
+<select name="propertytype" id="propertytype"  ccm-passed-value="s" class="ccm-input-select">
+		<option value="N/A" selected="selected">Select</option>
+		<option value="Apartment" >Apartment</option><option value="Bedsit" >Bedsit</option>
+		<option value="Bungalow" >Bungalow</option><option value="Converted Flat" >Converted Flat</option>
+		<option value="Cottage" >Cottage</option><option value="House" >House</option>
+		<option value="Maisonette" >Maisonette</option><option value="Purpose built flat" >Purpose built flat</option>
+		<option value="Studio Apartment" >Studio Apartment</option>
+		<option value="Townhouse" >Townhouse</option><option value="Other" >Other</option></select>
+<select name="propertytype2" id="propertytype2"  ccm-passed-value="s" class="ccm-input-select">
+		<option value="N/A" selected="selected">Select</option>
+		<option value="Detached" >Detached</option>
+		<option value="Semi Detached" >Semi Detached</option>
+		<option value="Mid Terrace" >Mid Terrace</option>
+		<option value="End Terrace" >End Terrace</option><option value="Linked Detached" >Linked Detached</option>
+</select>
+</fieldset>
+<label for="Tenant_Name">Tenant Name</label>
+<input id="Tenant_Name" type="text" name="Tenant_Name" value=""  class="ccm-input-text" />
+<div data-role="fieldcontain">
+    <fieldset data-role="controlgroup">
+	   <legend>Occupied:</legend>
+	   <input type="checkbox" name="Occupied" id="Occupied" class="custom" />
+	   <label for="Occupied">Yes</label>
+    </fieldset>
+</div>
+  <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<label>Furnished?</label>
+ <select name="furnished" id="furnished"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="Unfurnished" selected="selected">Unfurnished</option><option value="Furnished" >Furnished</option>
+ <option value="Part Furnished" >Part Furnished</option></select></fieldset>
+
+
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+
+				
+				
+				
+				<!-- Start of third page: #TENANT DETAILS -->
+		
+		
+<div data-role="page" id="TenantDetails">
+
+	<div data-role="header" data-theme="e">
+	
+	
+		<h1>Tenant Details</h1>
+		<a data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='saveTenant()'  class='ui-btn-right' >Save</a>      
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">
+<label for="Tenant_Name2">Tenant Name</label>
+<input id="Tenant_Name2" type="text" name="Tenant_Name2" value=""  class="ccm-input-text" />
+
+<form method="post" action="" class="sigPad">
+ 
+  <ul class="sigNav">
+    
+    
+    <li class="clearButton"><a href="#clear">Clear</a></li>
+  </ul>
+  <div class="sig sigWrapper">
+    <div class="typed"></div>
+    <canvas class="pad" width="490" height="100"></canvas>
+    <input type="hidden" name="Tenant_Sig" class="output" id="Tenant_Sig" >
+  </div>
+</form>
+<br />
+
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+
+				<!-- Start of third page: #METER READING -->
+<div data-role="page" id="meter">
+
+	<div data-role="header" data-theme="e">
+	
+	
+		<h1>Meter Readings</h1>
+		<a href="#" data-role="button" data-inline="true" data-icon="plus" onclick="showMeterForm()">Add</a>
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+			<input type='hidden' id='houseID' value='25' /><div data-role="fieldcontain" style="width:50%">
+			<br /><span id="addform" style="margin-right:300px; display:none"><input type='hidden' id='MeterID' value='' />
+						<label for="MeterType">Meter Type:</label>
+						<select id="MeterType" >
+						<option value="Electric">Electric</option><option value="Gas">Gas</option><option value="LPG">LPG</option><option value="Oil">Oil</option><option value="Water">Water</option>	</select>
+										<br />
+										<label for="Location">Location:</label>
+
+									<input type="text" id="Location" value="" />
+									
+									<label for="SerialNo">Serial No.:</label>
+									<input type="text" id="SerialNo" value="" />
+									
+									<label for="Reading">Reading:</label>
+									<input type="text" id="Reading"  value="" />
+									
+									<label for="Type">Type:</label>
+									<select id="Type" ><option value="Prepaid" >Prepaid</option><option value="Tariff" selected="true">Tariff</option>
+									</select>
+									<br />
+					<a href="#" data-role="button" data-inline="true" data-icon="plus" onclick="SaveMeter()">Save</a>
+					
+					
+						</div></span>
+						<div id="MeterReadings">
+						
+						</div>						
+
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+		<!-- Start of third page: #popup -->
+<div data-role="page" id="safety">
+
+	<div data-role="header" data-theme="e">
+	
+	
+		<h1>Safety</h1>
+			    <a  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='saveSafety();'  class='ui-btn-right' >Save</a>      
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">	
+		<div data-role="fieldcontain" >
+										
+								
+									<label for="SmokeAlarm">Smoke Alarm:</label>
+									<select name="slider" id="SmokeAlarm" data-role="slider"><option value="0">No</option><option value="1" >Yes</option></select> <br />
+									<label for="Gas">Gas Safety Cert.:</label>
+									<select name="slider" id="Gas" data-role="slider"><option value="0">No</option><option value="1" >Yes</option></select> <br />
+						  <label for="PAT">PAT Cert.:</label>
+							<select name="slider" id="PAT" data-role="slider"><option value="0">No</option><option value="1" >Yes</option></select> <br />
+							<label for="Window">Window Locks:</label>
+							<select name="slider" id="Window" data-role="slider"><option value="0" >No</option><option value="1" >Yes</option></select> <br />
+							<label for="COD">CO Detector:</label>
+							<select name="slider" id="COD" data-role="slider"><option value="0">No</option><option value="1" >Yes</option>
+								</select> <br />
+										<label for="SEC">Security Alarm:</label>
+									<select name="slider" id="SEC" data-role="slider">
+									<option value="0" >No</option>
+									<option value="1" >Yes</option></select> <br />	
+									<label for="SECLOC">Location:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+									<input type="text" id="SECLOC"  value="" />
+									<br />
+									<label for="SEC">Stopcock Location:</label>
+									<input type="text" id="StopLoc"  value="" />
+									<br />	
+
+</div>			
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+            </div>
+
+</body>
+<script type="text/javascript">
+
+//$(document).ready(function() {
+					var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+					
+						db.transaction(function (tx) {
+							 
+							$SQL = "SELECT DISTINCT AgentID,Name FROM Agents";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+
+								 for (i = 0; i < len; i++){
+								 
+									$ID = results.rows.item(i).AgentID
+									$Name = results.rows.item(i).Name
+											
+									$('#Agent').append('<option value="' + $ID + '">' + $Name + '</option>');
+												
+											
+								}
+								
+							});
+					});
+					
+					db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Property WHERE HouseID=" + id;
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+									$ID = results.rows.item(i).HouseID
+									$House_Number = results.rows.item(i).House_Number
+									$Address1 = results.rows.item(i).Address1
+									$Address2 = results.rows.item(i).Address2
+									$Town = results.rows.item(i).Town
+									$County = results.rows.item(i).County
+									$Postcode = results.rows.item(i).Postcode
+									$propertytype = results.rows.item(i).PropertyType
+									$propertytype2 = results.rows.item(i).PropertyType2
+									$Tenant_Name = results.rows.item(i).Tenant_Name
+									$Tenant_Sig = results.rows.item(i).Tenant_Sig
+									
+									$occupied = results.rows.item(i).Occupied
+									$furnished = results.rows.item(i).Furnished
+									$SmokeAlarm = results.rows.item(i).SmokeAlarm
+									$GASSafety = results.rows.item(i).GASSafety
+									$PAT = results.rows.item(i).PAT
+									$WindowLocks = results.rows.item(i).WindowLocks
+									$CODetector = results.rows.item(i).CODetector
+									$SEC = results.rows.item(i).SEC
+									$SECLOC = results.rows.item(i).SECLOC
+									$ReportType = results.rows.item(i).ReportType
+									$AgentID = results.rows.item(i).AgentID
+									$StopLoc = results.rows.item(i).StopLoc
+									$strAddress = $House_Number + " " + $Address1 + ", " + $County + ", " + $Postcode;
+										
+										$('#house_number').val($House_Number)
+										$('#address1').val($Address1)
+										$('#address2').val($Address2)
+										$('#town').val($Town)
+										$('#county').val($County)
+										$('#postcode').val($Postcode)
+										$('#propertytype').val($propertytype)
+										$('#propertytype2').val($propertytype2)
+										$('#Tenant_Name').val($Tenant_Name)
+										$('#Tenant_Name2').val($Tenant_Name)
+										 $('.sigPad').signaturePad({displayOnly : true}).regenerate($Tenant_Sig);
+										
+										
+										//$('#Occupied').val($occupied)
+										$('#furnished').val($furnished)
+										
+									$('#Agent option:selected').removeAttr('selected');
+									$('#Agent option[value="'+ $AgentID +'"]').attr('selected','selected');  
+									
+									$('#ReportType option:selected').removeAttr('selected');
+									$('#ReportType option[value="'+ $ReportType +'"]').attr('selected','selected');  
+									//$('#ReportType').selectmenu('refresh');		
+									$('#propertytype option:selected').removeAttr('selected');
+									$('#propertytype option[value="'+ $propertytype +'"]').attr('selected','selected');  
+									//$('#propertytype').selectmenu('refresh');									
+									$('#propertytype2 option:selected').removeAttr('selected');
+									$('#propertytype2 option[value="'+ $propertytype2 +'"]').attr('selected','selected');  
+									//$('#propertytype2').selectmenu('refresh');		
+									$('#furnished option:selected').removeAttr('selected');
+									$('#furnished option[value="'+ $furnished +'"]').attr('selected','selected');  
+									//$('#furnished').selectmenu('refresh');	
+									
+									$('#SEC').val($SEC);
+									//$('#SEC').slider('refresh');
+									$('#SmokeAlarm').val($SmokeAlarm);
+									//$('#SmokeAlarm').slider('refresh');
+									$('#Gas').val($GASSafety);
+									//$('#Gas').slider('refresh');
+									$('#PAT').val($PAT);
+									//$('#PAT').slider('refresh');
+									$('#Window').val($WindowLocks);
+									//$('#Window').slider('refresh');
+									$('#COD').val($CODetector);
+									$('#SECLOC').val($SECLOC)
+									$('#StopLoc').val($StopLoc)
+									//$('#COD').slider('refresh');
+									
+										
+							
+									
+									/*	if ($occupied == "Occupied") { 
+										$("#Occupied").attr("checked",true);
+										$("#Occupied").checkboxradio("refresh");	
+										
+										}
+										*/
+																
+								$('#header').html($strAddress + " / " + room + " - More");
+									
+									
+								
+									
+								}
+								
+							});
+					});
+					
+					db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Meter WHERE HouseID='" + id + "'";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+							
+								
+									$Electrici = 0;
+									$GASi = 0;
+									$LPGi =0;
+									$OILi = 0;
+									$Wateri =0;
+				
+								$ElectricText ='<h2>Electric</h2><ul data-role="listview" data-theme="g" data-inset="true">';
+								$GASText ='<h2>GAS</h2><ul data-role="listview" data-theme="g" data-inset="true">';
+								$LPGText ='<h2>LPG</h2><ul data-role="listview" data-theme="g" data-inset="true">';
+								$OILText ='<h2>OIL</h2><ul data-role="listview" data-theme="g" data-inset="true">';
+								$WaterText ='<h2>Water</h2><ul data-role="listview" data-theme="g" data-inset="true">';
+
+								
+								 for (i = 0; i < len; i++){
+									$ID = results.rows.item(i).HouseID
+									$MeterType = results.rows.item(i).MeterType
+									$Location = results.rows.item(i).Location
+									$SerialNo = results.rows.item(i).SerialNo
+									$Reading = results.rows.item(i).Reading
+									$Type = results.rows.item(i).Type
+									switch ($MeterType)
+									{
+											case "Electric":
+													$click = "";
+													if ($Location.length >0) {
+														$ElectricText += '<li><a  rel="external" href="' + $click +'" >' + $Location + ' / ' + $SerialNo + '</a></li>'
+														} 
+													else {
+														$ElectricText +='<li><a  rel="external" href="'+ $click + '" >No Location</a></li>'
+													} ;
+													$Electrici++;
+													break;
+											case "Gas":
+													$click = "";
+													if ($Location.length >0){
+														$GASText +='<li><a  rel="external" href="'+ $click + '" >' + $Location + ' / ' + $SerialNo + '</a></li>'
+													} 
+													else {
+														$GASText +='<li><a  rel="external" href="'+ $click + '" >No Location</a></li>'
+													} ;
+													$GASi++;
+													break
+											case "LPG":
+															$click = "";
+													if ($Location.length >0) {
+														$LPGText +='<li><a  rel="external" href="'+ $click + '" >' + $Location + ' / ' + $SerialNo + '</a></li>'
+														} 
+													else {
+														$LPGText +='<li><a  rel="external" href="'+ $click + '" >No Location</a></li>'
+													} ;
+													$LPGi++;
+													break;
+											case "Oil":
+													$click = "";
+													if ($Location.length >0) {
+														$OILText +='<li><a  rel="external" href="'+ $click + '" >' + $Location + ' / ' + $SerialNo + '</a></li>'
+														} 
+													else {
+														$OILText +='<li><a  rel="external" href="'+ $click + '" >No Location</a></li>'
+													} ;
+													$OILi++;
+													break;
+							
+											case "Water":
+													$click = "";
+													if ($Location.length >0) {
+														$WaterText +='<li><a  rel="external" href="'+ $click + '" >' + $Location + ' / ' + $SerialNo + '</a></li>'
+														} 
+													else {
+														$WaterText +='<li><a  rel="external" href="'+ $click + '" >No Location</a></li>'
+													} ;
+													$Wateri++;
+													break;
+
+										}
+								}
+								
+								$ElectricText += '</ul>';
+								$GASText +='</ul>';
+								$LPGText +='</ul>';
+								$OILText +='</ul>';
+								$WaterText +='</ul>';
+			
+				if ($Electrici >0) { $('#MeterReadings').append($ElectricText) };
+				if ($GASi >0) { $('#MeterReadings').append($GASText) };
+				if ($LPGi >0) { $('#MeterReadings').append($LPGText)};
+				if ($OILi >0) { $('#MeterReadings').append($OILText)};
+				if ($Wateri >0) { $('#MeterReadings').append($WaterText)};
+								
+								
+							});
+					});
+					
+					
+				
+					
+					
+					
+					
+					
+					
+					
+					
+					
+//});		
+					
+					
+					
+					
+			
+			
+	
+</script>
+
+  <script src="assets/js/jquery.signaturepad.min.js"></script>
+  <script>
+    $(document).ready(function() {
+      $('.sigPad').signaturePad({lineTop:'80', drawOnly:true});
+    });
+  </script>
+  <script src="assets/js/json2.min.js"></script>
+
+<html>

@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="offline.manifest">
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Your Inventory</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/dropbox.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.splitview.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.grids.collapsible.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.swipeButton-1.2.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/photoswipe.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/view.css" />
+
+  <link rel="stylesheet" href="assets/css/jquery.signaturepad.css">
+  <!--[if lt IE 9]><script src="../build/flashcanvas.js"></script><![endif]-->
+
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/js/cordova-1.7.0.js"></script>
+<script type="text/javascript" src="assets/js/links.js"></script>
+
+ <STYLE type="text/css">
+   input {display:block}
+ </STYLE>
+</head><body>	
+
+<script type="text/javascript">
+
+var pid = window.localStorage.getItem("type");
+var id = window.localStorage.getItem("id");
+var rid = window.localStorage.getItem("rid");
+var room = window.localStorage.getItem("room");
+var hid = window.localStorage.getItem("hid");
+var host = "http://" + window.location.host;
+var networkState = window.navigator.onLine;
+var server = "http://www.yourinventory.co.uk/dash/";
+	
+
+
+function updateOptions() { 
+	if (networkState ==true) { 
+		// build tables
+		var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+			db.transaction(function (tx) {
+			    // Create Options Tables
+    var tables = [
+      { name: "Options", columns: ["ID INTEGER PRIMARY KEY AUTOINCREMENT, Type,OType"]},
+	  { name: "Agents", columns: ["ID INTEGER PRIMARY KEY AUTOINCREMENT, Name,AgentID"]}
+    ];
+ 
+    for (var index = 0; index < tables.length; index++) {
+      var table = tables[index];
+      tx.executeSql("CREATE TABLE IF NOT EXISTS " + table.name + " (" +
+                    table.columns.join(", ") + ");");
+    }
+			});
+		// get data from server
+		$.getJSON(server + 'server/?pid=getOptions', function(json) {
+		
+			$.each(json, function(key,value) {
+				// insert data into tables
+				db.transaction(function (tx) {
+					tx.executeSql("INSERT INTO Options(Type,s OType) VALUES (?,?)",[json[key].Type,json[key].OType]);
+				});
+		
+			});
+			
+		});
+			// get data from server
+		$.getJSON(server + 'server/?pid=getAgentNames', function(json) {
+		
+			$.each(json, function(key,value) {
+				// insert data into tables
+				db.transaction(function (tx) {
+					tx.executeSql("INSERT INTO Agents(Name, AgentID) VALUES (?,?)",[json[key].Name,json[key].ID]);
+				});
+		
+			});
+			
+		});
+		// finished?
+		
+	}
+}
+	
+
+		
+function goBack(val) { 
+	switch(val) { 
+	case 1:
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("id");
+			window.localStorage.removeItem("hid");
+			window.localStorage.removeItem("iid");
+			window.localStorage.removeItem("room");
+			window.localStorage.removeItem("rid");
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+			return;
+	}
+	switch(pid) { 
+		
+		case "items":
+			window.localStorage.setItem("type","modify"); 
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+			break;
+		default:
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("type"); 
+			window.localStorage.removeItem("id");
+			window.localStorage.removeItem("hid");
+			window.localStorage.removeItem("iid");
+			window.localStorage.removeItem("room");
+			window.localStorage.removeItem("rid");
+			//window.location.href = host;
+			window.location.href = "index.html";
+			//window.location.reload();
+	}
+
+}
+			
+		function login() {
+			if (networkState ==true) { 
+				$Name = $('#UserName').val()
+				$Password = $('#Password').val()
+				var $ajaxurl = "dash/login/do_login"; 
+											
+				$.post($ajaxurl,{ uName: $Name , uPassword: $Password }, function(data) {
+											//location.reload();
+													$.getJSON(server + 'server/?pid=getUserD', function(json) {
+																if ($.trim(json[0].username) == $Name.toLowerCase()) { 
+																			saveLogin();
+																			$('#loginerror').html("Success!");
+																			// insert data into tables
+																			// delete settings?
+																								// delete keys
+														
+														db.transaction(function (tx) {
+														tx.executeSql("DELETE FROM Settings WHERE Type='Name' Or Type='id'",[],
+															function(tx, results) {
+																	
+															});
+														});
+																			db.transaction(function (tx) {
+																					tx.executeSql("INSERT INTO Settings(Type, Value) VALUES (?,?)",["Name",json[0].Name],
+																				function(tx, results) {
+																					//	window.location=host;
+								
+																				});
+																			}); 
+																			db.transaction(function (tx) {
+																					tx.executeSql("INSERT INTO Settings(Type, Value) VALUES (?,?)",["id",json[0].uid],
+																				function(tx, results) {
+																					//	window.location=host;
+								
+																				});
+																			}); 
+																} else {
+																		$('#loginerror').html("Username or Password not recognised");
+																};
+										
+		
+													//});
+			 									});
+										//$.get("dash/server/?pid=whoLogin", function(data) {
+									
+									//	});
+										
+										//save login details;
+										
+									});
+			} else { 
+				// no connection?
+		$("#msgBox").remove();
+		$("<div id='msgBox' class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>No Connection found</h1><a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#'onclick='$(\"#msgBox\").remove();'>Close</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+		.appendTo( $("#Main") )
+		.delay( 1500 )
+			}
+		}
+		
+		function saveLogin(val) { 
+			$Name = $('#UserName').val()
+				$Password = $('#Password').val()
+						 				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+														
+														// delete keys
+														
+															db.transaction(function (tx) {
+														tx.executeSql("DELETE FROM Settings WHERE Type='Username' Or Type='Password'",[],
+															function(tx, results) {
+																	
+															});
+														});
+														
+														db.transaction(function (tx) {
+														$sql = "Insert INTO Settings (Type,Value) VALUES ('Username','" + $Name + "')"
+														tx.executeSql($sql,[],
+															function(tx, results) {
+																
+															});
+														});
+														db.transaction(function (tx) {
+														$sql = "Insert INTO Settings (Type,Value) VALUES ('Password','" + $Password + "')"
+														tx.executeSql($sql,[],
+															function(tx, results) {
+															
+															});
+														});
+		if (val == '1') { 
+			$.getJSON(server + 'server/?pid=getUserD', function(json) {
+										if ($.trim(json[0].username) == $Name.toLowerCase()) { 
+													$('.ui-dialog').dialog('close');
+										} else {
+										$('#loginerror').html("Username or Password not recognised");
+										};
+			});
+
+		}
+		}
+		
+				
+</script>									
+
+            <div data-role="panel" data-id="main">
+                <!-- Start of second page -->
+                <div data-role="page" id="bar">
+
+				
+                    <div data-role="header" data-position="fixed" >
+					<a href='#'  data-iconpos='notext'  data-icon='back' data-theme='c' id="backbutton"  onclick="goBack();" >Back</a>
+                    <h1 id="header">More</h1>
+					
+                  
+                    
+                    
+                    
+</div><!-- /header -->
+
+
+             <div data-role="content" id="Main">  
+                   	
+<div id="p1">
+
+ 
+ <div data-role="controlgroup">
+<a href="#login" data-role="button" data-rel="dialog" data-transition="pop">Login Details</a>
+</div> 
+ <div data-role="controlgroup">
+<a href="#" data-role="button" onclick="updateOptions();">Update Data</a>
+</div>
+
+
+</div>
+
+
+
+                    </div><!-- /content -->
+
+               <div data-role="footer"  data-iconpos="top"  data-position="fixed">
+			   <div data-role="navbar">
+		<ul>
+			<li><a   href="#" onclick="goBack(1);" data-icon="home">Home</a></li>
+				
+			<li><a  data-role='button' href="#"  data-icon="gear">Settings</a></li>
+
+		
+	
+
+		</ul>
+	</div><!-- /navbar -->
+	
+		
+	</div><!-- /footer -->
+                </div><!-- /page -->
+                <!-- other main panel pages here -->
+				
+				
+				
+				
+		<!-- Start of third page: #login -->
+		
+		
+<div data-role="page" id="login">
+
+	<div data-role="header" data-theme="e">
+	
+	
+		<h1>Login</h1>
+		<a  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='saveLogin(1);'  class='ui-btn-right' >Save</a>      
+	</div><!-- /header -->
+
+	<div data-role="content" data-theme="d">
+					
+<label for="house_number">Username:</label>
+<input id="UserName" type="text" name="UserName" value=""  class="ccm-input-text" />
+<label for="Password">Password:</label>
+<input id="Password" type="text" name="Password" value=""  class="ccm-input-text" />
+<label id="loginerror"></label>
+<input type="submit" value="login" onclick="login();" />
+	</div><!-- /content -->
+	
+	<div data-role="footer">
+		
+	</div><!-- /footer -->
+</div><!-- /page popup -->
+
+				
+				
+							
+				
+				
+				
+
+
+</body>
+<script type="text/javascript">
+
+					var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+					
+					
+					db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Settings";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+									$Type = results.rows.item(i).Type
+									$Value = results.rows.item(i).Value
+									if ($Type =="Username") { $Name = $('#UserName').val($Value) }
+									if ($Type =="Password") { $Name = $('#Password').val($Value) }
+								}
+								
+							});
+					});
+	
+	
+</script>
+  <script src="assets/js/json2.min.js"></script>
+
+<html>

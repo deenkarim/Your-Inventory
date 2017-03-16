@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="offline.manifest">
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Your Inventory</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/view.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.datebox.min.css" /> 
+<link rel="stylesheet" href="assets/css/jquery.signaturepad.css">
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.datebox.min.js"></script>
+<script type="text/javascript" src="assets/js/links.js"></script>
+
+ <STYLE type="text/css">
+   input {display:block}
+ </STYLE>
+</head><body>	
+
+<script type="text/javascript">
+
+var host = "http://" + window.location.host;
+		function insertHouse() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+			
+
+				
+				db.transaction(function (tx) {
+					tx.executeSql("INSERT INTO Property (House_Number,Address1,Address2,Town,County,Postcode,PropertyType,PropertyType2,Tenant_Name,Occupied,Furnished, ReportType,AgentID,AppDate) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)",[$('#house_number').val(),$('#address1').val(),$('#address2').val(),$('#town').val(),$('#county').val(),$('#postcode').val(),$('#propertytype').val(),$('#propertytype2').val(),$('#Tenant_Name').val(),$('#occupied').val(),$('#furnished').val(),$('#ReportType').val(),$('#Agent').val(),$('#appdate').val()],
+					function(tx, results) {
+						window.location="index.html";
+					});
+				});	
+			
+		};
+		
+			function goBack() { 
+		//window.location = host;
+		 window.history.back();
+}
+				
+</script>									
+
+            <div data-role="panel" data-id="main">
+                <!-- Start of second page -->
+                <div data-role="page" id="bar">
+
+				
+                    <div data-role="header" data-position="fixed" >
+					<a href='#'  data-iconpos='notext'  data-icon='back' data-theme='c' id="backbutton"  onclick="goBack();" >Back</a>
+                    <h1 id="header">Add Property</h1>
+					<a  rel="external"  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='insertHouse()'  class='ui-btn-right' >Save</a>
+                  
+                    
+                    
+                    
+</div><!-- /header -->
+
+             <div data-role="content" id="Main">  
+                   	
+
+ 
+ <fieldset data-role="controlgroup" data-type="horizontal">
+<label for="appdate">Appointment Date:</label>
+<input name="appdate" id="appdate" type="date" data-role="datebox"
+   data-options='{"mode": "calbox", "calStartDay": 1,"calTodayButton": true,"dateFormat": "dd/mm/YYYY","focusMode": true}' />
+   </fieldset>
+ <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<label>Agent</label>
+ <select name="Agent" id="Agent"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="" selected="selected">Unassigned</option>
+ </select></fieldset>	
+ <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<label>Report Type</label>
+ <select name="ReportType" id="ReportType"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="Inventory and Check-In" selected="selected">Inventory and Check-In</option>
+ <option value="Periodic Property Inspection" >Periodic Property Inspection</option>
+ <option value="Check-out" >Check-out</option>
+  <option value="Vacant Property Inspection" >Vacant Property Inspection</option>
+ </select></fieldset>
+
+			
+<label for="house_number">House No.</label>
+<input id="house_number" type="text" name="house_number" value=""  class="ccm-input-text" />
+<label for="address1">Address 1</label>
+<input id="address1" type="text" name="address1" value=""  class="ccm-input-text" />
+<label for="address2">Address 2</label><input id="address2" type="text" name="address2" value=""  class="ccm-input-text" />
+<label for="town">Town</label><input id="town" type="text" name="town" value=""  class="ccm-input-text" /><label for="county">County</label>
+<input id="county" type="text" name="county" value=""  class="ccm-input-text" /><label for="postcode">Post Code</label>
+<input id="postcode" type="text" name="postcode" value=""  class="ccm-input-text" /> <fieldset data-role="controlgroup" data-type="horizontal">
+<legend>Property Type:</legend>
+<select name="propertytype" id="propertytype"  ccm-passed-value="s" class="ccm-input-select">
+		<option value="N/A" selected="selected">Select</option>
+		<option value="Apartment" >Apartment</option><option value="Bedsit" >Bedsit</option>
+		<option value="Bungalow" >Bungalow</option><option value="Converted Flat" >Converted Flat</option>
+		<option value="Cottage" >Cottage</option><option value="House" >House</option>
+		<option value="Maisonette" >Maisonette</option><option value="Purpose built flat" >Purpose built flat</option>
+		<option value="Studio Apartment" >Studio Apartment</option>
+		<option value="Townhouse" >Townhouse</option><option value="Other" >Other</option></select>
+<select name="propertytype2" id="propertytype2"  ccm-passed-value="s" class="ccm-input-select">
+		<option value="N/A" selected="selected">Select</option>
+		<option value="Detached" >Detached</option>
+		<option value="Semi Detached" >Semi Detached</option>
+		<option value="Mid Terrace" >Mid Terrace</option>
+		<option value="End Terrace" >End Terrace</option><option value="Linked Detached" >Linked Detached</option>
+</select>
+</fieldset>
+<label for="Tenant_Name">Tenant Name</label>
+<input id="Tenant_Name" type="text" name="Tenant_Name" value=""  class="ccm-input-text" /><label for="occupied">Occupied</label>
+<input type="checkbox"  class="ccm-input-checkbox" name="occupied" id="occupied" value="Occupied"  /> 
+  <fieldset data-role="controlgroup" data-type="horizontal">
+ 	<legend>Furnished?</legend>
+ <select name="furnished" id="furnished"  ccm-passed-value="0" class="ccm-input-select">
+ <option value="Unfurnished" selected="selected">Unfurnished</option><option value="Furnished" >Furnished</option>
+ <option value="Part Furnished" >Part Furnished</option></select></fieldset>
+
+ 
+                    </div><!-- /content -->
+
+               <div data-role="footer"  data-iconpos="top" data-position="fixed" >
+			   <div data-role="navbar">
+		<ul>
+						<li><a   href="#" onclick="goBack();" data-icon="home">Home</a></li>
+					<li><a onclick="window.location='settings.html';return false;"  data-role='button' href="#"  data-icon="gear">Settings</a></li>
+		</ul>
+	</div><!-- /navbar -->
+	
+		
+	</div><!-- /footer -->
+                </div><!-- /page -->
+                <!-- other main panel pages here -->
+            </div>
+
+</body>
+<script type="text/javascript">
+
+//$(document).ready(function() {
+					var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+					
+						db.transaction(function (tx) {
+							 
+							 $SQL = "SELECT DISTINCT AgentID,Name FROM Agents";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+
+								 for (i = 0; i < len; i++){
+								 
+									$ID = results.rows.item(i).AgentID
+									$Name = results.rows.item(i).Name
+											
+									$('#Agent').append('<option value="' + $ID + '">' + $Name + '</option>');
+												
+											
+								}
+								
+							});
+					});
+</script>
+<html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html manifest="offline.manifest">
+<head>
+<meta name="viewport" content="width=device-width, minimum-scale=1, maximum-scale=1">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>Your Inventory</title>
+<meta name="description" content="" />
+<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta names="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<!--[if lt IE 9]>
+          <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+
+
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/dropbox.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.splitview.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.mobile.grids.collapsible.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/jquery.swipeButton-1.2.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/photoswipe.css" />
+<link rel="stylesheet" type="text/css" href="assets/css/view.css" />
+
+<script type="text/javascript" src="assets/js/klass.min.js"></script>
+<script type="text/javascript" src="assets/js/jquery.js"></script>
+<script type="text/javascript" src="assets/js/jquery.filedrop.js"></script>
+<script type="text/javascript" src="assets/js/dropbox.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.splitview.js"></script>
+<script type="text/javascript" src="assets/js/jquery.mobile.js"></script>
+<script type="text/javascript" src="assets/js/querystring-0.9.0-min.js"></script>
+<script type="text/javascript" src="assets/js/iscroll-wrapper.js"></script>
+<script type="text/javascript" src="assets/js/iscroll.js"></script>
+<script type="text/javascript" src="assets/js/jqm.autoComplete-1.3.js"></script>
+<script type="text/javascript" src="assets/js/jquery.swipeButton.min-1.2.js"></script>
+<script type="text/javascript" src="assets/js/code.photoswipe.jquery-3.0.4.min.js"></script>
+<script type="text/javascript" charset="utf-8" src="assets/js/cordova.ios.js"></script>
+<script type="text/javascript" src="assets/js/links.js"></script>
+
+
+<script type="text/javascript">
+
+var iid = window.localStorage.getItem("iid");
+var rid = window.localStorage.getItem("rid");
+var id = window.localStorage.getItem("id");
+var room = window.localStorage.getItem("room");
+var host = "http://" + window.location.host;
+	
+	function goBack() { 
+//		window.location = host;
+					window.location.href = "index.html";
+
+}
+	
+	
+	function insertItem() {
+				var db = window.openDatabase('yourDB', '2', 'Inventory DB', 200000);
+			
+						//insert other ?
+				db.transaction(function (tx) {
+				
+					$Item = $('#ItemType').val()
+					tx.executeSql("INSERT INTO Options (Type, OType) VALUES (?,?)",[$Item, "1"],
+					function(tx, results) {
+						//	window.location=host;
+							
+					});
+				});	
+				db.transaction(function (tx) {
+				
+					$Item = $('#Colour').val()
+					tx.executeSql("INSERT INTO Options (Type, OType) VALUES (?,?)",[$Item, "2"],
+					function(tx, results) {
+						//	window.location=host;
+							
+					});
+				});	
+				db.transaction(function (tx) {
+				
+					$Item = $('#Condition').val()
+					tx.executeSql("INSERT INTO Options (Type, OType) VALUES (?,?)",[$Item, "3"],
+					function(tx, results) {
+						//	window.location=host;
+							
+					});
+				});	
+				db.transaction(function (tx) {
+				
+					$Item = $('#Description').val()
+					tx.executeSql("INSERT INTO Options (Type, OType) VALUES (?,?)",[$Item, "4"],
+					function(tx, results) {
+						//	window.location=host;
+							
+					});
+				});	
+		
+				
+			if(typeof(iid) != "undefined" && iid !== null) { 
+				db.transaction(function (tx) {
+					$Item = $('#ItemType').val()
+					$DESC = $('#Description').val()
+					$Color = $('#Colour').val()
+					$Condition = $('#Condition').val()
+					tx.executeSql("UPDATE Items SET RoomID='" + rid + "', ItemType='" + $Item + "', Description='" + $DESC + "', Colour='" + $Color + "', Condition='" + $Condition + "' WHERE ItemID='" + iid + "'",[],
+					function(tx, results) {
+						//	window.location= host;
+							window.location= "index.html";
+					});
+				});	
+			} else  {
+				
+				db.transaction(function (tx) {
+					$ID = rid
+					$Item = $('#ItemType').val()
+					$DESC = $('#Description').val()
+					$Color = $('#Colour').val()
+					$Condition = $('#Condition').val()
+					tx.executeSql("INSERT INTO Items (RoomID, ItemType, Description, Colour,Condition ) VALUES (?,?,?,?,?)",[$ID,$Item,$DESC,$Color,$Condition],
+					function(tx, results) {
+							//window.location=host;
+							window.location= "index.html";
+							
+					});
+				});	
+			};
+			
+
+			
+		};
+		
+				
+</script>	
+
+		
+            <div data-role="panel" data-id="main">
+                <!-- Start of second page -->
+                <div data-role="page" id="bar">
+
+				
+                    <div data-role="header" >
+                    <a href='#'  data-iconpos='notext'  data-icon='back' data-theme='c' id="backbutton"  onclick="goBack();" >Back</a>
+		    <h1 id="header"></h1>
+		    <a  data-role='button' data-icon='check'  data-inline='true'  data-theme='c' onclick='insertItem();'  class='ui-btn-right' >Save</a>                    
+                    
+                    
+                    
+</div><!-- /header -->
+
+                    <div data-role="content" id="Main">  
+                   	
+	<div class="ui-grid-a">
+	<div class="ui-block-a">
+
+
+<label for="Item">Item</label>
+<select name='ItemTypeSel' id='ItemTypeSel'></select>
+<input style="width: 85%;display:none" id="ItemType" type="text" name="ItemType" value="" class="ccm-input-text ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+
+<label for="Description">Description</label><textarea id="Description" name="Description"  style="width: 100%" class="ccm-input-textarea"></textarea>
+<ul id="suggestions" data-role="listview" data-inset="true"></ul>
+
+<label for="Colour">Colour</label>
+
+<select name='ItemColour' id='ItemColour'>
+</select>
+<input style="width: 85%;display:none" id="Colour" type="text" name="Colour" value="" class="ccm-input-text ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+
+<label for="Condition">Condition</label>
+<select name='ItemCondition' id='ItemCondition'>
+</select>
+<input style="width: 85%;display:none" id="Condition" type="text" name="Condition" value="" class="ccm-input-text ui-input-text ui-body-c ui-corner-all ui-shadow-inset">
+
+<script>
+
+
+
+
+
+				// opens up message box
+	
+	function messagebox(value) { 
+		
+		$("<div id='msgBox' class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>" + value + "</h1><a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href=''>Yes</a>&nbsp;<a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#'onclick='$(\"#msgBox\").hide();'>No</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+  .appendTo( $("#Main") )
+  .delay( 1500 )
+};
+	
+				// opens up message box
+	function messagebox2(value) { 
+		
+		$("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>" + value + "</h1><a class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href=''>Yes</a>&nbsp;<a class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href=''>No</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+  .appendTo( $("#Main") )
+  .delay( 1500 )
+  .fadeOut( 400, function(){
+    $(this).remove();
+  });
+};
+		
+	
+	
+	
+	  $("#DescSelect").change(function () {
+	  		 var str = "";
+          $("#DescSelect option:selected").each(function () {
+                str += $(this).text();
+                if (str=="Select...") { str=""};
+                $("#Description").text(str);
+              });
+              
+	  			
+	  		 }).change();
+	  		 
+	  $("#ItemTypeSel").change(function () {
+	  	  var str = "";
+          $("#ItemTypeSel option:selected").each(function () {
+                str += $(this).text();
+              });
+          
+           switch(str) {
+										case "Other":
+											$("#ItemType").attr("style","width: 85%;display:inline")
+											$("#OtherAdd").show()
+											$("#ItemType").val('')
+											break;
+										default:
+												  var dStr = "";
+												  $("#ItemType").hide()
+												  $("#OtherAdd").hide()
+												  $("#ItemType").val(str)
+												  break;
+					 }
+      
+			// update  Desc box?
+			
+	 })
+        .change();
+
+ $("#ItemColour").change(function () {
+	  	  var str = "";
+          $("#ItemColour option:selected").each(function () {
+                str += $(this).text();
+              });
+          
+           switch(str) {
+										case "Other":
+											$("#Colour").attr("style","width: 85%;display:inline")
+											$("#ColourOtherAdd").show()
+											$("#Colour").val('')
+											break;
+										default:
+												  var dStr = "";
+												  $("#Colour").hide()
+												  $("#ColourOtherAdd").hide()
+												  $("#Colour").val(str)
+												  break;
+					 }
+          
+	 })
+        .change();
+
+ $("#ItemCondition").change(function () {
+	  	  var str = "";
+          $("#ItemCondition option:selected").each(function () {
+                str += $(this).text();
+              });
+          
+           switch(str) {
+										case "Other":
+											$("#Condition").attr("style","width: 85%;display:inline")
+											$("#Condition").show()
+											$("#ConditionAdd").show()
+											$("#Condition").val('')
+											
+											break;
+										default:
+												  var dStr = "";
+												  $("#Condition").hide()
+												  $("#ConditionAdd").hide()
+												  $("#Condition").val(str)
+												  break;
+					 }
+          
+	 })
+        .change();
+
+
+
+
+	function addOther() { 
+		var Other = $("#ItemType").val();
+		$("#msgBox").remove();
+		$("<div id='msgBox' class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>Are you sure you wish to add: " + Other + "</h1><a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#' onclick='addOtherDB();'>Yes</a>&nbsp;<a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#'onclick='$(\"#msgBox\").remove();'>No</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+  .appendTo( $("#Main") )
+  .delay( 1500 )
+};
+
+
+			function addOtherDB() { 
+	
+      var Other = $("#ItemType").val();
+      Other = Other.replace("&","and");
+      var $ajaxurl = '/server/?pid=addItem&item=' +Other;
+      $.post($ajaxurl, function(data) {
+      			location.reload();
+  				});
+        
+		};
+		
+			function addColourOther() { 
+		var Other = $("#Colour").val();
+		
+		$("#msgBox").remove();
+		$("<div id='msgBox' class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>Are you sure you wish to add: " + Other + "</h1><a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#' onclick='addColourDB();'>Yes</a>&nbsp;<a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#'onclick='$(\"#msgBox\").remove();'>No</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+  .appendTo( $("#Main") )
+  .delay( 1500 )
+};
+		function addColourDB() { 
+      var Other = $("#Colour").val();
+      Other = Other.replace("&","and");
+      var $ajaxurl = '/server/?pid=addColour&item=' +Other;
+      $.post($ajaxurl, function(data) {
+      			location.reload();
+  				});
+        
+		};
+	function addDesc() { 
+      var Other = $("#Description").val();
+	  var Item = $("#ItemType").val();
+      Other = Other.replace("&","and");
+	  var $ajaxurl = '/server/?pid=addDesc&item=' + Other + '&oitem=' + Item;
+      		$.post($ajaxurl, function(data) {
+      			location.reload();
+  				});
+        
+		};
+		
+		
+					function addCondition() { 
+		var Other = $("#Condition").val();
+		$("#msgBox").remove();
+		$("<div id='msgBox' class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all'><h1>Are you sure you wish to add: " + Other + "</h1><a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#' onclick='addConditionDB();'>Yes</a>&nbsp;<a style='display:inline; padding:2px 10px 2px 10px' class='ui-btn-left ui-btn ui-btn-corner-all ui-shadow ui-btn-hover-d ui-btn-up-d' href='#'onclick='$(\"#msgBox\").remove();'>No</a></div>").css({ "display": "block", "opacity": 0.96, "top": $(window).scrollTop() + 100 })
+  .appendTo( $("#Main") )
+  .delay( 1500 )
+};
+		function addConditionDB() { 
+      var Other = $("#Condition").val();
+      Other = Other.replace("&","and");
+      var $ajaxurl = '/server/?pid=addCondition&item=' +Other;
+      		$.post($ajaxurl, function(data) {
+      			location.reload();
+  				});
+        
+		};
+		
+		
+		
+
+
+</script>
+
+
+
+
+
+
+
+
+</form></div>
+<div class="ui-block-b"></div>
+</div><!-- /grid-a -->
+
+			
+
+ 
+                    </div><!-- /content -->
+
+               <div data-role="footer"  data-iconpos="top" >
+			   <div data-role="navbar">
+		<ul>
+					<li><a   href="#" onclick="goBack();" data-icon="home"  data-role='button'>Home</a></li>
+		<li id="more"><a   onclick="window.location='more.html';return false;" data-icon="grid"  data-role='button'>More</a></li>
+			<li><a onclick="window.location='settings.html';return false;"  data-role='button' href="#"  data-icon="gear">Settings</a></li>
+		</ul>
+	</div><!-- /navbar -->
+	
+		
+	</div><!-- /footer -->
+                </div><!-- /page -->
+                <!-- other main panel pages here -->
+            </div>
+
+</body>
+<script type="text/javascript">
+var availableTags ="";
+		
+					var db = window.openDatabase('yourDB', '', 'Inventory DB', 200000);
+								db.transaction(function (tx) {
+							 
+							$SQL = "SELECT DISTINCT Type, OType FROM Options";
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+									$Type = results.rows.item(i).Type
+									$OType = results.rows.item(i).OType
+									switch ($OType) { 
+										case "1": 
+											$('#ItemTypeSel').append('<option value="' + $Type + '">' + $Type + '</option>');
+											break;
+										case "2":
+										$('#ItemColour').append('<option value="' + $Type + '">' + $Type + '</option>');
+										break;
+										case "3":
+										$('#ItemCondition').append('<option value="' + $Type + '">' + $Type + '</option>');
+										break;
+										case "4":
+										availableTags += $Type + ",";
+										
+										break;
+										
+									
+									}
+								}
+								
+								$('#ItemTypeSel').append('<option value="Other">Other</option>');
+								$('#ItemColour').append('<option value="Other">Other</option>');
+								$('#ItemCondition').append('<option value="Other">Other</option>');
+								$("#ItemTypeSel option:first").attr('selected','selected');
+								$("#ItemColour option:first").attr('selected','selected');
+								$("#ItemCondition option:first").attr('selected','selected');
+								$('#ItemTypeSel').selectmenu('refresh');
+								$('#ItemColour').selectmenu('refresh');
+								$('#ItemCondition').selectmenu('refresh');
+								
+									
+									availableTags = availableTags.substring(0,availableTags.length -1);
+			$("#Description").autocomplete({
+				target: $('#suggestions'),
+				source:availableTags, 
+				callback: function(e) {
+					var $a = $(e.currentTarget);
+					$('#Description').val($a.text());
+					$("#Description").autocomplete('clear');
+				},
+				link: 'target.html?term=',
+				minLength: 1
+			});
+							});
+					});
+					
+					
+					
+	
+			
+			
+			
+					db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Property WHERE HouseID=" + id;
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+								 for (i = 0; i < len; i++){
+									$ID = results.rows.item(i).HouseID
+									$House_Number = results.rows.item(i).House_Number
+									$Address1 = results.rows.item(i).Address1
+									$County = results.rows.item(i).County
+									$Postcode = results.rows.item(i).Postcode
+									$strAddress = $House_Number + " " + $Address1 + ", " + $County + ", " + $Postcode;
+									if(typeof(iid) != "undefined" && iid !== null) {  
+									$('#header').html($strAddress + " / " + room + " - Edit Item");
+									} else { 
+									$('#header').html($strAddress + " / " + room + " - Add Item");
+									}
+									
+								
+									
+								}
+								
+							});
+					});
+					
+
+					//if ($.QueryString("iid") <=1) { 
+						db.transaction(function (tx) {
+							 
+							$SQL = "SELECT * FROM Items WHERE ItemID=" + iid;
+							tx.executeSql($SQL, [], function (tx, results) {
+								var len = results.rows.length, i;
+
+								 for (i = 0; i < len; i++){
+								 
+									$ID = results.rows.item(i).ItemID
+									$RoomID = results.rows.item(i).RoomID
+									$ItemType = results.rows.item(i).ItemType
+									$Description = results.rows.item(i).Description
+									$Colour = results.rows.item(i).Colour
+									$Condition = results.rows.item(i).Condition
+
+									
+									$('#ItemTypeSel option:selected').removeAttr('selected');
+									$('#ItemTypeSel option[value="'+ $ItemType +'"]').attr('selected','selected');  
+									$('#ItemTypeSel').selectmenu('refresh');									
+									$('#Description').val($Description);
+	
+									$('#ItemCondition option:selected').removeAttr('selected');
+									$('#ItemCondition option[value="'+ $Condition +'"]').attr('selected','selected');  
+									$('#ItemCondition').selectmenu('refresh');
+																	
+								$('#ItemColour option:selected').removeAttr('selected');
+									$('#ItemColour option[value="'+ $Colour +'"]').attr('selected','selected');  
+									$('#ItemColour').selectmenu('refresh');
+								
+														
+								$Item = $('#ItemType').val($ItemType);
+								$Item = $('#Colour').val($Colour);
+								$Item = $('#Condition').val($Condition);
+
+									
+								}
+								
+							});
+					});
+				
+					//};
+					
+					
+					
+					
+			
+			
+	
+</script>
+
+<html>
